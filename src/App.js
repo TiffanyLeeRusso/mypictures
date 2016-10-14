@@ -72,6 +72,7 @@ class ActionBar extends Component {
     var additionalActionBarClass = this.props.additionalClass ? this.props.additionalClass : "";
     return (
       <div className={"action-bar " + additionalActionBarClass}>
+        <div>Full functionality coming soon!</div>
         <div className="col">
           <button className="btn">Add Selected to Album</button>
         </div>
