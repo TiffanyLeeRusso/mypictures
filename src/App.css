@@ -6,3 +6,33 @@
   padding: 20px 50px;
   color: #999;
 }
+
+.grid {
+  list-style: none;
+}
+
+.grid-item {
+  position: relative;
+  display: inline-block;
+  margin: 10px;
+}
+
+.grid-item img {
+  width: 200px;
+}
+
+.grid-item .select-box {
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  color: #eee;
+  font-weight: normal;
+  background: rgba(0,0,0,0.5);
+  width: 100%;
+  padding: 5px;
+}
+
+.grid-item .select-box span { margin-left: 5px; }
+
+
+
