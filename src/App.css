@@ -2,17 +2,32 @@
   text-align: center;
 }
 
+
 .navbar {
   padding: 20px 50px;
   color: #999;
+  margin-bottom: 0;
+  border-bottom: 1px solid #111;
 }
 
 
-.action-bar .col{
+.action-bar {
+  width: 100%;
+  background: #999;
+  position: relative;
+}
+.action-bar-fixed {
+  position: fixed;
+  top: -75px;
+  z-index: 2;
+  -webkit-transition: top 0.3s ease 0s;
+          transition: top 0.3s ease 0s;
+}
+.action-bar-fixed-shown { top: 0; }
+ 
+.action-bar .col {
   display: inline-block;
-}
-.action-bar div:nth-of-type(1) {
-    margin-right: 50px;
+  padding: 20px;
 }
 
 

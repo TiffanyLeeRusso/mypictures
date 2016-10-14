@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import $ from 'jquery';
 import './App.css';
 
 // Set up some data for the pictures
@@ -24,27 +25,42 @@ var albums = [
 ];
 
 // App
-class App extends Component {
-    render() {
-        return (
-            <div className="App">
-              <Header />
-              <ActionBar/>
-              <Grid />
-            </div>
-            );
-    }
+export default class App extends Component {
+  componentDidMount() {
+    window.addEventListener('scroll', this.handleScroll);
+  }
+
+  componentWillUnmount() {
+      window.removeEventListener('scroll', this.handleScroll);
+  }
+
+  handleScroll() {
+      if((window.pageYOffset || document.documentElement.scrollTop) >= 300) {
+          $(".action-bar-fixed").addClass("action-bar-fixed-shown");
+      } else {
+          $(".action-bar-fixed").removeClass("action-bar-fixed-shown");
+      }
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <ActionBar additionalClass="action-bar-fixed"/>
+        <Header />
+        <ActionBar/>
+        <Grid />
+      </div>
+      );
+  }
 }
 
 // Header
 class Header extends Component {
     render() {
         return (
-            <div className="App">
-              <div className="navbar navbar-inverse navbar-static-top">
-                <img src="https://placekitten.com/70/70" alt="logo" />
-                <h2>Welcome to MyPictures, a React experiment</h2>
-              </div>
+            <div className="navbar navbar-inverse navbar-static-top">
+              <img src="https://placekitten.com/70/70" alt="logo" />
+              <h2>Welcome to MyPictures, a React experiment</h2>
             </div>
             );
     }
@@ -53,8 +69,9 @@ class Header extends Component {
 // Action Bar
 class ActionBar extends Component {
     render() {
+        var additionalActionBarClass = this.props.additionalClass ? this.props.additionalClass : "";
         return (
-            <div className="action-bar">
+            <div className={"action-bar " + additionalActionBarClass}>
               <div className="col">
                 <button className="btn">Add Selected to Album</button>
               </div>
@@ -79,7 +96,7 @@ class AlbumSelector extends Component {
     render() {
         var albumList = albums.map(function(album) {
                 return (
-                    <li key={album.id}><a href="#" id={album.id}>{album.name}</a></li>
+                    <li key={album.id}><a href="#" data-picId={album.id}>{album.name}</a></li>
                     );
             });
         return (
@@ -123,6 +140,4 @@ class GridItem extends Component {
             );
     }
 }
-
-export default App;
 
