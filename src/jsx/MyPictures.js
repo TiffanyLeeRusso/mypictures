@@ -3,7 +3,7 @@ import $ from 'jquery';
 import Header from './Header.js';
 import ActionBar from './ActionBar.js';
 import Grid from './Grid.js';
-import './css/MyPictures.css';
+import '../css/MyPictures.css';
 
 var albums = [
   { id: "0",

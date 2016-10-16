@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './css/Grid.css';
+import '../css/Grid.css';
 
 // Grid
 export default class Grid extends Component {
