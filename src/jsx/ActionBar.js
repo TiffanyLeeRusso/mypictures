@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import AlbumSelector from './AlbumSelector.js';
 import '../css/ActionBar.css';
 
 // Action Bar
@@ -11,17 +12,18 @@ export default class ActionBar extends Component {
         <div className="col">
           <AddToAlbumButton/>
         </div>
-        <div className="col">
         {(() => {
           var albumSelector;
           if(this.props.albums.length > 0) {
-            albumSelector = <AlbumSelector albums={this.props.albums}/>;
+            albumSelector = 
+              <div className="col">
+                <AlbumSelector albums={this.props.albums} text="View Album"/>
+              </div>;
           } else {
             albumSelector = null;
           }
           return albumSelector;
         })()}
-        </div>
       </div>
     );
   }
@@ -29,32 +31,11 @@ export default class ActionBar extends Component {
 
 // Add-to-album button
 class AddToAlbumButton extends Component {
-  handleClick() {
-    console.log('click!');
-  }
   render() {
     return (
-      <button className="btn" onClick={this.handleClick}>Add to Album</button>
+      <button type="button" className="btn" data-toggle="modal" data-target="#albumManagerOverlay">
+        Add to Album
+      </button>
     )
-  }
-}
-
-// Album Selector
-class AlbumSelector extends Component {
-  render() {
-    var albumList = this.props.albums.map(function(album) {
-      return (
-        <li key={album.id}><a href="#" data-picId={album.id}>{album.name}</a></li>
-      );
-    });
-    return (
-      <div className="dropdown">
-        <button className="btn dropdown-toggle" type="button" data-toggle="dropdown">View Album &nbsp;
-          <span className="caret"></span></button>
-        <ul className="dropdown-menu">
-          {albumList}
-        </ul>
-      </div>
-    );
   }
 }

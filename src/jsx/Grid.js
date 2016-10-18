@@ -23,8 +23,8 @@ class GridItem extends Component {
     return (
       <li className="grid-item">
         <img src={"https://placekitten.com/" + this.props.width + "/" + this.props.height + "?image=" + this.props.id} alt="kitten"/>
-        <label className="select-box" htmlFor={this.props.id}>
-          <input type="checkbox" id={this.props.id} />
+        <label className="select-box" htmlFor={"picture-" + this.props.id}>
+        <input type="checkbox" id={"picture-" + this.props.id} data-picture-id={this.props.id} className="picture-selector" />
           <span>Add to album</span>
         </label>
       </li>

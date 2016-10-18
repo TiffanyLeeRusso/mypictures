@@ -1,0 +1,9 @@
+/* AlbumSelector.css */
+
+#albumManagerOverlay .album-selector button {
+  background-color: #fff;
+  border-color: #ccc;
+  border-right: none;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}

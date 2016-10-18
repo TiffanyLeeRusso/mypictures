@@ -1,0 +1,14 @@
+/* AlbumManagerOverlay.css */
+
+.modal-header {
+  border-bottom: 1px solid #ddd;
+  background-color: #ddd;
+
+  border-top-right-radius: 6px;
+   border-top-left-radius: 6px;
+}
+
+.input-group {
+  margin: auto;
+  width: 80%;
+}

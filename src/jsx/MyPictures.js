@@ -3,6 +3,7 @@ import $ from 'jquery';
 import Header from './Header.js';
 import ActionBar from './ActionBar.js';
 import Grid from './Grid.js';
+import AlbumManagerOverlay from './AlbumManagerOverlay.js';
 import '../css/MyPictures.css';
 
 var albums = [
@@ -60,7 +61,8 @@ export default class MyPictures extends Component {
         <ActionBar additionalClass="action-bar-fixed" albums={this.state.albums}/>
         <Header />
         <ActionBar albums={this.state.albums}/>
-      <Grid pictureData={this.state.pictureData}/>
+        <Grid pictureData={this.state.pictureData}/>
+      <AlbumManagerOverlay albums={this.state.albums}/>
       </div>
       );
   }
