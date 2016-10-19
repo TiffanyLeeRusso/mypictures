@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
+import $ from 'jquery';
 import '../css/Grid.css';
 
 // Grid
 export default class Grid extends Component {
+  propTypes: { updateCheckedPictures: React.PropTypes.func }
+
   render() {
     var pics = this.props.pictureData.map(function(pic) {
       return (
-        <GridItem key={pic.id} id={pic.id} width={pic.width} height={pic.height}/>
+        <GridItem updateCheckedPictures={this.props.updateCheckedPictures} key={pic.id} id={pic.id} width={pic.width} height={pic.height}/>
       );
-    });
+    }.bind(this));
     return (
       <ul className="grid">
         {pics}
@@ -19,12 +22,18 @@ export default class Grid extends Component {
 
 // GridItem
 class GridItem extends Component {
+  propTypes: { updateCheckedPictures: React.PropTypes.func }
+
+  onChange(event) {
+    this.props.updateCheckedPictures($(event.target).attr("data-picture-id"), event.target.checked);
+  }
+
   render() {
     return (
       <li className="grid-item">
         <img src={"https://placekitten.com/" + this.props.width + "/" + this.props.height + "?image=" + this.props.id} alt="kitten"/>
         <label className="select-box" htmlFor={"picture-" + this.props.id}>
-        <input type="checkbox" id={"picture-" + this.props.id} data-picture-id={this.props.id} className="picture-selector" />
+          <input type="checkbox" id={"picture-" + this.props.id} data-picture-id={this.props.id} className="picture-selector" onChange={this.onChange.bind(this)}/>
           <span>Add to album</span>
         </label>
       </li>

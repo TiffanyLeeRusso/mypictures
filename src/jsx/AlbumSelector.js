@@ -3,14 +3,11 @@ import '../css/AlbumSelector.css';
 
 // Album Selector
 export default class AlbumSelector extends Component {
-
   propTypes: { updateSelectedAlbum: React.PropTypes.func }
 
   handleClick(albumName, albumID) {
     this.props.updateSelectedAlbum({ name: albumName, id: albumID });
   }
-
-  propTypes: { updateSelectedAlbum: React.PropTypes.func }
 
   render() {
 

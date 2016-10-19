@@ -6,22 +6,21 @@ import Grid from './Grid.js';
 import AlbumManagerOverlay from './AlbumManagerOverlay.js';
 import '../css/MyPictures.css';
 
-var albums = [
-  { id: "0",
-    name: "Album 0" },
-  { id: "1",
-    name: "Album 1" },
-  { id: "2",
-    name: "Album 2" }
-];
-
 // MyPictures
 export default class MyPictures extends Component {
   constructor(props) {
     super(props);
     this.state = {
       pictureData: [],
-      albums: albums
+      albums: [
+        { id: "0",
+          name: "Album 0" },
+        { id: "1",
+          name: "Album 1" },
+        { id: "2",
+          name: "Album 2" }
+      ],
+      checkedPictures: []
     };
   }
 
@@ -55,15 +54,28 @@ export default class MyPictures extends Component {
     }
   }
 
+  updateCheckedPictures(pictureID, add) {
+    if(add) {
+      this.setState({
+        checkedPictures: this.state.checkedPictures.concat( {id: pictureID} )
+      });
+
+    } else {
+      var checkedPictures = this.state.checkedPictures;
+      checkedPictures = $.grep(checkedPictures, function(o){ return o.id !== pictureID; });
+      this.setState({ checkedPictures: checkedPictures });
+    }
+  }
+
   render() {
     return (
       <div className="my-pictures">
         <ActionBar additionalClass="action-bar-fixed" albums={this.state.albums}/>
         <Header />
         <ActionBar albums={this.state.albums}/>
-        <Grid pictureData={this.state.pictureData}/>
-      <AlbumManagerOverlay albums={this.state.albums}/>
+        <Grid pictureData={this.state.pictureData} updateCheckedPictures={this.updateCheckedPictures.bind(this)}/>
+        <AlbumManagerOverlay albums={this.state.albums} checkedPictures={this.state.checkedPictures}/>
       </div>
-      );
+    );
   }
 }

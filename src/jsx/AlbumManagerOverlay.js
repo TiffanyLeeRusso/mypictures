@@ -26,11 +26,27 @@ export default class AlbumManagerOverlay extends Component {
               <h4 className="modal-title" id="album-manager-overlay-label">Add to Album</h4>
             </div>
             <div className="modal-body">
-              <AlbumManager albums={this.props.albums} selectedAlbum={this.state.selectedAlbum}/>
+
+              {(() => {
+                if(this.props.checkedPictures.length === 0) {
+                  return <div className="no-selected-pictures">Please select at least one picture!</div>;
+                } else {
+                  return <AlbumManager albums={this.props.albums} selectedAlbum={this.state.selectedAlbum}/>
+                }
+              })()}
+
             </div>
             <div className="modal-footer">
+
               <button type="button" className="btn btn-default" data-dismiss="modal" onClick={this.close.bind(this, false)}>Cancel</button>
-              <button type="button" className="btn btn-primary" onClick={this.close.bind(this, true)}>Save</button>
+
+              {(() => {
+                if(this.props.checkedPictures.length > 0) {
+                  return <button type="button" className="btn btn-primary" onClick={this.close.bind(this, true)}>Save</button>
+                }
+                return null
+              })()}
+
             </div>
           </div>
         </div>
