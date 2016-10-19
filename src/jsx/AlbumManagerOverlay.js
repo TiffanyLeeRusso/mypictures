@@ -17,7 +17,7 @@ export default class AlbumManagerOverlay extends Component {
               <AlbumManager albums={this.props.albums}/>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" className="btn btn-default" data-dismiss="modal">Cancel</button>
               <button type="button" className="btn btn-primary">Save</button>
             </div>
           </div>
@@ -29,6 +29,20 @@ export default class AlbumManagerOverlay extends Component {
 
 // AlbumManager
 class AlbumManager extends Component {
+
+  constructor(props) {
+    super(props);
+    // Keep our state here so NewAlbumInput will receive 
+    // updates when the AlbumSelector/state changes
+    this.state = {
+      selectedAlbum: {name: "", id: "" }
+    };
+  }
+
+  updateSelectedAlbum(album) {
+    this.setState({ selectedAlbum: album });
+  }
+
   render() {
     var albumManager;
 
@@ -42,9 +56,9 @@ class AlbumManager extends Component {
 
           <div className="input-group">
             <div className="input-group-btn">
-              <AlbumSelector albums={this.props.albums} text="Select Album"/>
+              <AlbumSelector updateSelectedAlbum={this.updateSelectedAlbum.bind(this)} albums={this.props.albums} text="Select Album"/>
             </div>
-            <NewAlbumInput/>
+            <NewAlbumInput albumName={this.state.selectedAlbum.name} albumID={this.state.selectedAlbum.id}/>
           </div>
         </div>;
 
@@ -54,7 +68,7 @@ class AlbumManager extends Component {
         <div className="album-manager">
           <div className="description">Enter an album name:</div>
           <div className="input-group">
-            <NewAlbumInput/>
+            <NewAlbumInput albumName="" albumID=""/>
           </div>
         </div>;
     }
@@ -65,9 +79,34 @@ class AlbumManager extends Component {
 
 // NewAlbumInput
 class NewAlbumInput extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      selectedAlbum: {name: "", id: "" }
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // We received an album from the parent so the AlbumSelector was used.
+    // We should override our selectedAlbum.
+    this.setState({
+      selectedAlbum: {name: nextProps.albumName, id: nextProps.albumID}
+    });
+  }
+
+  handleChange(event) {
+    // The user is typing
+    this.setState({selectedAlbum: {name: event.target.value, id: "" } });
+  }
+
   render() {
     return (
-      <input type="text" className="form-control" aria-label=""/>
+      <input type="text" className="form-control" aria-label="Select album"
+             onChange={this.handleChange} value={this.state.selectedAlbum.name}
+              data-album-id={this.state.selectedAlbum.id}/>
     )
   }
 }

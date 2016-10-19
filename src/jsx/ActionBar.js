@@ -4,6 +4,10 @@ import '../css/ActionBar.css';
 
 // Action Bar
 export default class ActionBar extends Component {
+  updateSelectedAlbum(albumName, albumID) {
+    console.log("updateSelectedalbum (actionbar)", albumName, albumID);
+  }
+
   render() {
     var additionalActionBarClass = this.props.additionalClass ? this.props.additionalClass : "";
     return (
@@ -12,18 +16,16 @@ export default class ActionBar extends Component {
         <div className="col">
           <AddToAlbumButton/>
         </div>
+
         {(() => {
-          var albumSelector;
           if(this.props.albums.length > 0) {
-            albumSelector = 
-              <div className="col">
-                <AlbumSelector albums={this.props.albums} text="View Album"/>
-              </div>;
-          } else {
-            albumSelector = null;
+            return <div className="col">
+                     <AlbumSelector updateSelectedAlbum={this.updateSelectedAlbum.bind(this)} albums={this.props.albums} text="View Album"/>
+                   </div>;
           }
-          return albumSelector;
+          return null;
         })()}
+
       </div>
     );
   }

@@ -3,13 +3,25 @@ import '../css/AlbumSelector.css';
 
 // Album Selector
 export default class AlbumSelector extends Component {
+
+  propTypes: { updateSelectedAlbum: React.PropTypes.func }
+
+  handleClick(albumName, albumID) {
+    this.props.updateSelectedAlbum({ name: albumName, id: albumID });
+  }
+
+  propTypes: { updateSelectedAlbum: React.PropTypes.func }
+
   render() {
+
     if(this.props.albums.length > 0) {
+
       var albumList = this.props.albums.map(function(album) {
         return (
-          <li key={album.id}><a href="#" data-picId={album.id}>{album.name}</a></li>
+          <li key={album.id}><a href="#" onClick={this.handleClick.bind(this, album.name, album.id)} data-picId={album.id}>{album.name}</a></li>
         );
-      });
+      }.bind(this));
+
       return (
         <div className="dropdown album-selector">
           <button className="btn dropdown-toggle" type="button" data-toggle="dropdown">{this.props.text}&nbsp;
@@ -20,6 +32,7 @@ export default class AlbumSelector extends Component {
           </ul>
         </div>
       );
+
     } else {
       return (
         <div className="album-selector-empty"></div>
@@ -27,3 +40,4 @@ export default class AlbumSelector extends Component {
     }
   }
 }
+

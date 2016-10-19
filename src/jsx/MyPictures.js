@@ -17,7 +17,7 @@ var albums = [
 
 // MyPictures
 export default class MyPictures extends Component {
- constructor(props) {
+  constructor(props) {
     super(props);
     this.state = {
       pictureData: [],
