@@ -4,6 +4,18 @@ import '../css/AlbumManagerOverlay.css';
 
 // AlbumManagerOverlay
 export default class AlbumManagerOverlay extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedAlbum: {name: "", id: "" }
+    };
+  }
+
+  close(save){
+    // Clear the album for the next modal open
+    this.setState({selectedAlbum: {name: "", id: ""} });
+  }
+
   render() {
     return (
       <div className="modal fade" id="albumManagerOverlay" tabIndex="-1" role="dialog" aria-labelledby="album-manager-overlay-label">
@@ -11,14 +23,14 @@ export default class AlbumManagerOverlay extends Component {
           <div className="modal-content">
             <div className="modal-header">
               <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 className="modal-title" id="album-manager-overlay-label">Add to Album</h4>
+              <h4 className="modal-title" id="album-manager-overlay-label">Add to Album</h4>
             </div>
             <div className="modal-body">
-              <AlbumManager albums={this.props.albums}/>
+              <AlbumManager albums={this.props.albums} selectedAlbum={this.state.selectedAlbum}/>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-default" data-dismiss="modal">Cancel</button>
-              <button type="button" className="btn btn-primary">Save</button>
+              <button type="button" className="btn btn-default" data-dismiss="modal" onClick={this.close.bind(this, false)}>Cancel</button>
+              <button type="button" className="btn btn-primary" onClick={this.close.bind(this, true)}>Save</button>
             </div>
           </div>
         </div>
@@ -32,13 +44,19 @@ class AlbumManager extends Component {
 
   constructor(props) {
     super(props);
-    // Keep our state here so NewAlbumInput will receive 
-    // updates when the AlbumSelector/state changes
     this.state = {
       selectedAlbum: {name: "", id: "" }
     };
   }
 
+  // AlbumManagerOverlay is resetting the album 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      selectedAlbum: nextProps.selectedAlbum
+    });
+  }
+
+  // We received an album from AlbumSelector
   updateSelectedAlbum(album) {
     this.setState({ selectedAlbum: album });
   }
