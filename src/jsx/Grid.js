@@ -9,7 +9,7 @@ export default class Grid extends Component {
   render() {
     var pics = this.props.pictureData.map(function(pic) {
       return (
-        <GridItem updateCheckedPictures={this.props.updateCheckedPictures} key={pic.id} id={pic.id} width={pic.width} height={pic.height}/>
+          <GridItem showCheckboxes={this.props.showCheckboxes} updateCheckedPictures={this.props.updateCheckedPictures} key={pic.id} id={pic.id} width={pic.width} height={pic.height}/>
       );
     }.bind(this));
     return (
@@ -32,10 +32,15 @@ class GridItem extends Component {
     return (
       <li className="grid-item">
         <img src={"https://placekitten.com/" + this.props.width + "/" + this.props.height + "?image=" + this.props.id} alt="kitten"/>
-        <label className="select-box" htmlFor={"picture-" + this.props.id}>
-          <input type="checkbox" id={"picture-" + this.props.id} data-picture-id={this.props.id} className="picture-selector" onChange={this.onChange.bind(this)}/>
-          <span>Add to album</span>
-        </label>
+        {(() => {
+          if(this.props.showCheckboxes) {
+            return <label className="select-box" htmlFor={"picture-" + this.props.id}>
+                     <input type="checkbox" id={"picture-" + this.props.id} data-picture-id={this.props.id} className="picture-selector" onChange={this.onChange.bind(this)}/>
+                     <span>Add to album</span>
+                   </label>
+          }
+          return null;
+        })()}
       </li>
     );
   }

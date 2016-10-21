@@ -25,6 +25,13 @@ export default class AlbumSelector extends Component {
             <span className="caret"></span>
           </button>
           <ul className="dropdown-menu">
+            {(() => {
+              if(this.props.showAll) {
+                return <li key="showAll"><a href="#" onClick={this.handleClick.bind(this, "", "")} data-picId="">Show All</a></li>
+              }
+              return null;
+            })()}
+
             {albumList}
           </ul>
         </div>

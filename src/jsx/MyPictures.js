@@ -11,14 +11,19 @@ export default class MyPictures extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pictureData: [],
+      pictureData: [], // objects with 'width', 'height', and 'id'
+      currentPictureData: [], // subset of pictureData
+      currentAlbum: null,
       albums: [
         { id: "0",
-          name: "Album 0" },
+          name: "Album 0",
+          pictures: [1, 2] },
         { id: "1",
-          name: "Album 1" },
+          name: "Album 1",
+          pictures: [3, 4, 5, 6, 7] },
         { id: "2",
-          name: "Album 2" }
+          name: "Album 2",
+          pictures: [3, 8, 16] }
       ],
       checkedPictures: []
     };
@@ -31,7 +36,7 @@ export default class MyPictures extends Component {
       dataType: 'json',
       cache: false,
       success: function(data) {
-        this.setState({pictureData: data.pictureData});
+        this.setState({pictureData: data.pictureData, currentPictureData: data.pictureData});
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -61,20 +66,53 @@ export default class MyPictures extends Component {
       });
 
     } else {
-      var checkedPictures = this.state.checkedPictures;
+      let checkedPictures = this.state.checkedPictures;
       checkedPictures = $.grep(checkedPictures, function(o){ return o.id !== pictureID; });
       this.setState({ checkedPictures: checkedPictures });
     }
   }
 
+  updateSelectedAlbum(album) {
+    // If we did not receive album info, show all pictures
+    if(!album.id) {
+      this.setState({ currentAlbum: null,
+                      checkedPictures: [],
+                      currentPictureData: this.state.pictureData });
+      return true;
+    }
+
+    // Get the current album information from our album list
+    let currentAlbum = $.grep(this.state.albums, function(o){ return o.id === album.id; })[0];
+
+    // Get the picture info for the current album from our picture-data list
+    let currentPictures = [];
+    for(let i = 0; i < currentAlbum.pictures.length; i++) {
+      let currentPicture = $.grep(this.state.pictureData, function(o){ return o.id === currentAlbum.pictures[i]; })[0];
+      currentPictures.push(currentPicture);
+    }
+
+    // Set currentPictureData, which will trigger a redraw of the grid.
+    this.setState({ currentAlbum: album.id,
+                    checkedPictures: [],
+                    currentPictureData: currentPictures });
+  }
+
   render() {
     return (
       <div className="my-pictures">
-        <ActionBar additionalClass="action-bar-fixed" albums={this.state.albums}/>
+        <ActionBar additionalClass="action-bar-fixed" 
+                   addAvailable={this.state.currentAlbum === null}
+                   albums={this.state.albums}
+                   updateSelectedAlbum={this.updateSelectedAlbum.bind(this)}/>
         <Header />
-        <ActionBar albums={this.state.albums}/>
-        <Grid pictureData={this.state.pictureData} updateCheckedPictures={this.updateCheckedPictures.bind(this)}/>
-        <AlbumManagerOverlay albums={this.state.albums} checkedPictures={this.state.checkedPictures}/>
+        <ActionBar albums={this.state.albums}
+                   addAvailable={this.state.currentAlbum === null}
+                   updateSelectedAlbum={this.updateSelectedAlbum.bind(this)}/>
+        <Grid pictureData={this.state.currentPictureData}
+              showCheckboxes={this.state.currentAlbum === null}
+              updateCheckedPictures={this.updateCheckedPictures.bind(this)}/>
+        <AlbumManagerOverlay albums={this.state.albums}
+                   checkedPictures={this.state.checkedPictures}/>
       </div>
     );
   }

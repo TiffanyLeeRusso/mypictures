@@ -4,8 +4,10 @@ import '../css/ActionBar.css';
 
 // Action Bar
 export default class ActionBar extends Component {
-  updateSelectedAlbum(albumName, albumID) {
-    console.log("updateSelectedalbum (actionbar)", albumName, albumID);
+  propTypes: { updateSelectedAlbum: React.PropTypes.func }
+
+  updateSelectedAlbum(album) {
+    this.props.updateSelectedAlbum(album);
   }
 
   render() {
@@ -13,14 +15,19 @@ export default class ActionBar extends Component {
     return (
       <div className={"action-bar " + additionalActionBarClass}>
         <div>Full functionality coming soon!</div>
-        <div className="col">
-          <AddToAlbumButton/>
-        </div>
+        {(() => {
+          if(this.props.addAvailable) {
+            return <div className="col">
+                     <AddToAlbumButton/>
+                   </div>
+          }
+          return null;
+        })()}
 
         {(() => {
           if(this.props.albums.length > 0) {
             return <div className="col">
-                     <AlbumSelector updateSelectedAlbum={this.updateSelectedAlbum.bind(this)} albums={this.props.albums} text="View Album"/>
+                     <AlbumSelector updateSelectedAlbum={this.updateSelectedAlbum.bind(this)} albums={this.props.albums} text="View Album" showAll="true"/>
                    </div>;
           }
           return null;
