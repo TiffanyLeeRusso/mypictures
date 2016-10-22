@@ -61,13 +61,16 @@ export default class MyPictures extends Component {
 
   updateCheckedPictures(pictureID, add) {
     if(add) {
+      let checkedPictures = this.state.checkedPictures;
+      checkedPictures.push(parseInt(pictureID, 10));
       this.setState({
-        checkedPictures: this.state.checkedPictures.concat( {id: pictureID} )
+        checkedPictures: $.unique(checkedPictures)
       });
 
     } else {
       let checkedPictures = this.state.checkedPictures;
-      checkedPictures = $.grep(checkedPictures, function(o){ return o.id !== pictureID; });
+      let picToRemove = checkedPictures.indexOf(pictureID);
+      checkedPictures = checkedPictures.splice(picToRemove, 1);
       this.setState({ checkedPictures: checkedPictures });
     }
   }
@@ -97,6 +100,35 @@ export default class MyPictures extends Component {
                     currentPictureData: currentPictures });
   }
 
+  // Add this.state.checkedPictures to the given album
+  addToAlbum(album) {
+    var albums = this.state.albums;
+
+    if(!album.id) {
+      // New album
+      var lastID = parseInt(albums[albums.length - 1].id, 10);
+      var newAlbum = { id: ++lastID,
+                       name: album.name,
+                       pictures: this.state.checkedPictures
+      }
+
+      albums.push(newAlbum);
+
+    } else {
+      // Add to existing album
+      var existingAlbumIndex = albums.findIndex(function(el) { return el.id === album.id; });
+      var existingAlbum = albums[existingAlbumIndex];
+
+      existingAlbum.pictures = existingAlbum.pictures.concat(this.state.checkedPictures);
+      existingAlbum.pictures = $.unique(existingAlbum.pictures);
+
+      // Replace the existing album
+      albums.splice(existingAlbumIndex, 1, existingAlbum);
+    }
+
+    this.setState({albums: albums});
+  }
+
   render() {
     return (
       <div className="my-pictures">
@@ -112,7 +144,8 @@ export default class MyPictures extends Component {
               showCheckboxes={this.state.currentAlbum === null}
               updateCheckedPictures={this.updateCheckedPictures.bind(this)}/>
         <AlbumManagerOverlay albums={this.state.albums}
-                   checkedPictures={this.state.checkedPictures}/>
+                   checkedPictures={this.state.checkedPictures}
+                   addToAlbum={this.addToAlbum.bind(this)}/>
       </div>
     );
   }

@@ -15,7 +15,7 @@ export default class AlbumSelector extends Component {
 
       var albumList = this.props.albums.map(function(album) {
         return (
-          <li key={album.id}><a href="#" onClick={this.handleClick.bind(this, album.name, album.id)} data-picId={album.id}>{album.name}</a></li>
+          <li key={album.id}><a onClick={this.handleClick.bind(this, album.name, album.id)} data-picId={album.id}>{album.name}</a></li>
         );
       }.bind(this));
 

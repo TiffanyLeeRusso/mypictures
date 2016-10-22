@@ -11,9 +11,18 @@ export default class AlbumManagerOverlay extends Component {
     };
   }
 
+  propTypes: { addToAlbum: React.PropTypes.func }
+
+  updateSelectedAlbum(album) {
+    this.setState({selectedAlbum: album});
+  }
+
   close(save){
-    // Clear the album for the next modal open
+    // Clear the album for the next modal open.
     this.setState({selectedAlbum: {name: "", id: ""} });
+    if(save) {
+      this.props.addToAlbum(this.state.selectedAlbum);
+    }
   }
 
   render() {
@@ -31,7 +40,7 @@ export default class AlbumManagerOverlay extends Component {
                 if(this.props.checkedPictures.length === 0) {
                   return <div className="no-selected-pictures">Please select at least one picture!</div>;
                 } else {
-                  return <AlbumManager albums={this.props.albums} selectedAlbum={this.state.selectedAlbum}/>
+                  return <AlbumManager albums={this.props.albums} selectedAlbum={this.state.selectedAlbum} updateSelectedAlbum={this.updateSelectedAlbum.bind(this)}/>
                 }
               })()}
 
@@ -42,7 +51,7 @@ export default class AlbumManagerOverlay extends Component {
 
               {(() => {
                 if(this.props.checkedPictures.length > 0) {
-                  return <button type="button" className="btn btn-primary" onClick={this.close.bind(this, true)}>Save</button>
+                  return <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={this.close.bind(this, true)}>Save</button>
                 }
                 return null
               })()}
@@ -65,6 +74,8 @@ class AlbumManager extends Component {
     };
   }
 
+  propTypes: { updateSelectedAlbum: React.PropTypes.func }
+
   // AlbumManagerOverlay is resetting the album 
   componentWillReceiveProps(nextProps) {
     this.setState({
@@ -75,6 +86,7 @@ class AlbumManager extends Component {
   // We received an album from AlbumSelector
   updateSelectedAlbum(album) {
     this.setState({ selectedAlbum: album });
+    this.props.updateSelectedAlbum(album);
   }
 
   render() {
@@ -92,7 +104,7 @@ class AlbumManager extends Component {
             <div className="input-group-btn">
               <AlbumSelector updateSelectedAlbum={this.updateSelectedAlbum.bind(this)} albums={this.props.albums} text="Select Album"/>
             </div>
-            <NewAlbumInput albumName={this.state.selectedAlbum.name} albumID={this.state.selectedAlbum.id}/>
+            <NewAlbumInput albumName={this.state.selectedAlbum.name} albumID={this.state.selectedAlbum.id} updateSelectedAlbum={this.updateSelectedAlbum.bind(this)}/>
           </div>
         </div>;
 
@@ -102,7 +114,7 @@ class AlbumManager extends Component {
         <div className="album-manager">
           <div className="description">Enter an album name:</div>
           <div className="input-group">
-            <NewAlbumInput albumName="" albumID=""/>
+            <NewAlbumInput albumName="" albumID="" updateSelectedAlbum={this.updateSelectedAlbum.bind(this)}/>
           </div>
         </div>;
     }
@@ -123,6 +135,8 @@ class NewAlbumInput extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
+  propTypes: { updateSelectedAlbum: React.PropTypes.func }
+
   componentWillReceiveProps(nextProps) {
     // We received an album from the parent so the AlbumSelector was used.
     // We should override our selectedAlbum.
@@ -133,14 +147,16 @@ class NewAlbumInput extends Component {
 
   handleChange(event) {
     // The user is typing
-    this.setState({selectedAlbum: {name: event.target.value, id: "" } });
+    var newAlbum = {name: event.target.value, id: "" };
+    this.setState({selectedAlbum: newAlbum });
+    this.props.updateSelectedAlbum(newAlbum);
   }
 
   render() {
     return (
       <input type="text" className="form-control" aria-label="Select album"
              onChange={this.handleChange} value={this.state.selectedAlbum.name}
-              data-album-id={this.state.selectedAlbum.id}/>
+             data-album-id={this.state.selectedAlbum.id}/>
     )
   }
 }
