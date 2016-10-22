@@ -126,7 +126,10 @@ export default class MyPictures extends Component {
       albums.splice(existingAlbumIndex, 1, existingAlbum);
     }
 
-    this.setState({albums: albums});
+    this.setState({
+      albums: albums,
+      checkedPictures: []
+    });
   }
 
   render() {
@@ -141,6 +144,7 @@ export default class MyPictures extends Component {
                    addAvailable={this.state.currentAlbum === null}
                    updateSelectedAlbum={this.updateSelectedAlbum.bind(this)}/>
         <Grid pictureData={this.state.currentPictureData}
+              checkedPictures={this.state.checkedPictures}
               showCheckboxes={this.state.currentAlbum === null}
               updateCheckedPictures={this.updateCheckedPictures.bind(this)}/>
         <AlbumManagerOverlay albums={this.state.albums}

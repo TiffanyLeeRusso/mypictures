@@ -8,8 +8,12 @@ export default class Grid extends Component {
 
   render() {
     var pics = this.props.pictureData.map(function(pic) {
+      let checked = this.props.checkedPictures.indexOf(pic.id) > -1 ? true : false;
       return (
-          <GridItem showCheckboxes={this.props.showCheckboxes} updateCheckedPictures={this.props.updateCheckedPictures} key={pic.id} id={pic.id} width={pic.width} height={pic.height}/>
+          <GridItem showCheckboxes={this.props.showCheckboxes}
+                    updateCheckedPictures={this.props.updateCheckedPictures}
+                    key={pic.id} id={pic.id} width={pic.width} height={pic.height}
+                    checked={checked}/>
       );
     }.bind(this));
     return (
@@ -35,7 +39,10 @@ class GridItem extends Component {
         {(() => {
           if(this.props.showCheckboxes) {
             return <label className="select-box" htmlFor={"picture-" + this.props.id}>
-                     <input type="checkbox" id={"picture-" + this.props.id} data-picture-id={this.props.id} className="picture-selector" onChange={this.onChange.bind(this)}/>
+                     <input checked={this.props.checked} type="checkbox" 
+                            id={"picture-" + this.props.id} data-picture-id={this.props.id}
+                            className="picture-selector"
+                            onChange={this.onChange.bind(this)}/>
                      <span>Add to album</span>
                    </label>
           }
