@@ -60,19 +60,17 @@ export default class MyPictures extends Component {
   }
 
   updateCheckedPictures(pictureID, add) {
+    let checkedPictures = this.state.checkedPictures;
+
     if(add) {
-      let checkedPictures = this.state.checkedPictures;
       checkedPictures.push(parseInt(pictureID, 10));
-      this.setState({
-        checkedPictures: $.unique(checkedPictures)
-      });
 
     } else {
-      let checkedPictures = this.state.checkedPictures;
-      let picToRemove = checkedPictures.indexOf(pictureID);
-      checkedPictures = checkedPictures.splice(picToRemove, 1);
-      this.setState({ checkedPictures: checkedPictures });
+      let picToRemove = checkedPictures.indexOf(parseInt(pictureID, 10));
+      if(picToRemove > -1) { checkedPictures.splice(picToRemove, 1); }
     }
+
+    this.setState({ checkedPictures: checkedPictures });
   }
 
   updateSelectedAlbum(album) {
@@ -120,7 +118,7 @@ export default class MyPictures extends Component {
       var existingAlbum = albums[existingAlbumIndex];
 
       existingAlbum.pictures = existingAlbum.pictures.concat(this.state.checkedPictures);
-      existingAlbum.pictures = $.unique(existingAlbum.pictures);
+      $.uniqueSort(existingAlbum.pictures); // remove duplicate pictures
 
       // Replace the existing album
       albums.splice(existingAlbumIndex, 1, existingAlbum);
