@@ -35,7 +35,7 @@ class GridItem extends Component {
   render() {
     return (
       <li className="grid-item">
-        <img src={"https://placekitten.com/" + this.props.width + "/" + this.props.height} alt="kitten"/>
+        <img src={"https://loremflickr.com/" + this.props.width + "/" + this.props.height + "/kitten?lock=" + this.props.id} alt="kitten"/>
         {(() => {
           if(this.props.showCheckboxes) {
             return <label className="select-box" htmlFor={"picture-" + this.props.id}>
